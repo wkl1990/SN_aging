@@ -1,6 +1,6 @@
 #!/bin/python
 
-# example: python /projects/ps-renlab2/kaw033/WK_aging/scripts/02b.merge_data.py -i /projects/ps-renlab2/kaw033/WK_aging/peak_calling/age_track/samle_info_celltypeage.txt -o /projects/ps-renlab2/kaw033/WK_aging/peak_calling/age_track/subset/
+# example: python 01h.ATAC.mergedata.py -i samle_info_celltypeage.txt -o /peak_calling/subset/
 
 
 import argparse

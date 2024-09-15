@@ -16,7 +16,7 @@ RNA$age_rep <- factor(case_match(RNA$sampleID, "2m_rep1" ~ 2.1, "6m_rep1" ~ 6.1,
 
 # seurat pseudo-bulk
 pseudo_bulk <- function(data=RNA, celltype=celltype, idents="celltype", assay="RNA", slot="count", group.by="sampleID"){
-  Idents(data) <- RNA@meta.data[[idents]]
+  Idents(data) <- data@meta.data[[idents]]
   RNA_celltype <- subset(data, idents=celltype)
   RNA_celltype_pseudobulk <- AggregateExpression(RNA_celltype, assays=assay, slot=slot, group.by=group.by)$RNA
   colnames(RNA_celltype_pseudobulk) <- gsub("^g", "", colnames(RNA_celltype_pseudobulk))
@@ -33,12 +33,12 @@ pseudo_filter <- function(data=RNA_pseudobulk, depth=1000000, count=1, samples=1
 
 # meta table
 meta_table <- function(data=RNA, celltype=celltype, sample="sampleID", ident="celltype", select=c("sampleID", "age", "rep", "age_rep", "sample_cells")){
-  Idents(data) <- RNA@meta.data[[ident]]
+  Idents(data) <- data@meta.data[[ident]]
   RNA_celltype <- subset(data, idents=celltype)
   sample_cells <- table(data@meta.data[,sample]) %>%  as.vector()
   names(sample_cells) <- names(table(data@meta.data[,sample]))
   m <- match(names(sample_cells), data@meta.data[,sample])
-  RNA_celltype_meta <- data.frame(RNA@meta.data[m, ], sample_cells, row.names = NULL) %>% dplyr::select(select)
+  RNA_celltype_meta <- data.frame(data@meta.data[m, ], sample_cells, row.names = NULL) %>% dplyr::select(select)
   t <- table(RNA_celltype@meta.data[,sample], RNA_celltype@meta.data[,ident])
   cell_counts <- t[, which(colnames(t) == celltype)]
   RNA_celltype_meta$n_cells <- cell_counts[match(RNA_celltype_meta$sampleID, names(cell_counts))]
